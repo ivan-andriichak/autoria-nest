@@ -11,12 +11,15 @@ export class CarRepository extends Repository<CarEntity> {
   }
 
   public async getList(
+    userId: string,
     query: CarsListQueryDto,
   ): Promise<[CarEntity[], number]> {
     const qb = this.createQueryBuilder('car');
 
     qb.leftJoinAndSelect('car.tags', 'tag');
     qb.leftJoinAndSelect('car.user', 'user');
+
+    qb.setParameter('userId', userId);
 
     if (query.search) {
       qb.andWhere('CONCAT(car.make, car.description) ILIKE :search');
@@ -27,6 +30,9 @@ export class CarRepository extends Repository<CarEntity> {
       qb.andWhere('tag.name = :tag');
       qb.setParameter('tag', query.tag);
     }
+
+    qb.take(query.limit);
+    qb.skip(query.offset);
 
     if (query.model) {
       qb.andWhere('car.model = :model');

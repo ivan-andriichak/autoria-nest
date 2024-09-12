@@ -20,9 +20,10 @@ export class CarService {
   ) {}
 
   public async getList(
+    userData: IUserData,
     query: CarsListQueryDto,
   ): Promise<[CarEntity[], number]> {
-    return await this.carRepository.getList( query);
+    return await this.carRepository.getList( userData.userId, query);
   }
 
   public async create(

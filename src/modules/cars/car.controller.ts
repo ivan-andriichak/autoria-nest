@@ -11,7 +11,6 @@ import { CarResDto } from './dto/res/car.res.dto';
 import { CarListResDto } from './dto/res/car-list.res.dto';
 import { CarMapper } from './services/car.mapper';
 import { CarService } from './services/car.service';
-import { CarEntity } from '../../database/entities/car.entity';
 
 @ApiBearerAuth()
 @ApiTags('Cars')
@@ -25,9 +24,10 @@ export class CarController {
   @ApiOkResponse({ description: 'List of cars' })
   @Get()
   public async getList(
+    @CurrentUser() userData: IUserData,
     @Query() query: CarsListQueryDto,
   ): Promise<CarListResDto> {
-    const [entities, total] = await this.carService.getList(query);
+    const [entities, total] = await this.carService.getList(userData,query);
     return CarMapper.toResponseListDTO(entities, total, query);
   }
 
@@ -60,7 +60,7 @@ export class CarController {
     @Param('carId') carId: string,
     @Body() dto: UpdateCarReqDto,
   ): Promise<CarResDto> {
-    return await this.carService.updateCar( userData, carId, dto);
+    return await this.carService.updateCar(userData, carId, dto);
   }
 
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })

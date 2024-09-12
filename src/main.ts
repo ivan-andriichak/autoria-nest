@@ -19,8 +19,10 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Avtoria-NestJS')
-    .setDescription('Avtoria-NestJS - a scalable and flexible car selling platform similar to AutoRia,' +
-      ' integrated with AWS.')
+    .setDescription(
+      'Avtoria-NestJS - a scalable and flexible car selling platform similar to AutoRia,' +
+        ' integrated with AWS.',
+    )
     .setVersion('1.0.0')
     .addBearerAuth({
       type: 'http',

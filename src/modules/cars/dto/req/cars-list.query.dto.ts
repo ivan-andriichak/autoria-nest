@@ -1,5 +1,13 @@
 import { Transform, Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, IsNumber, Max, Min } from 'class-validator';
+import {
+  IsInt,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+} from 'class-validator';
+
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 
 export class CarsListQueryDto {

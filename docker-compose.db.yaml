@@ -10,9 +10,9 @@ services:
       POSTGRES_PASSWORD: '${POSTGRES_PASSWORD:-password}'
       POSTGRES_DB: '${POSTGRES_DB:-avtoria-nest}'
     volumes:
-      - ./ avtoria-2024-api-db:/var/lib/postgresql/avtoria-2024
+      - ./ avtoria-2024-api-pg-db:/var/lib/postgresql/avtoria-2024
 
-  jan-2024-redis:
+  avtoria-redis:
     image: redis:7.2.3
     ports:
       - '${REDIS_PORT:-6379}:6379'
@@ -28,7 +28,7 @@ services:
       - "8000:9000"
       - "8001:9001"
     volumes:
-      - ./jan-2024-api-s3-data:/usr/src/app/s3
+      - ./avtoria-2024-api-s3-db:/usr/src/app/s3
     environment:
       MINIO_ROOT_USER: '${AWS_S3_ACCESS_KEY:-user}'
       MINIO_ROOT_PASSWORD: '${AWS_S3_SECRET_KEY:-password}'

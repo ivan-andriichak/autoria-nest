@@ -1,11 +1,9 @@
-import {
-  CarEntity,
-} from '../../../database/entities/car.entity';
+import { CarEntity } from '../../../database/entities/car.entity';
 import { UserMapper } from '../../users/user.maper';
 import { CarsListQueryDto } from '../dto/req/cars-list.query.dto';
 import { CarResDto } from '../dto/res/car.res.dto';
 import { CarListResDto } from '../dto/res/car-list.res.dto';
-import { ArticleListItemResDto } from '../dto/res/car-list-item.res.dto';
+import { CarListItemResDto } from '../dto/res/car-list-item.res.dto';
 
 export class CarMapper {
   public static toResponseListDTO(
@@ -20,15 +18,14 @@ export class CarMapper {
     };
   }
 
-  public static toResponseListItemDTO(
-    entity: CarEntity,
-  ): ArticleListItemResDto {
+  public static toResponseListItemDTO(entity: CarEntity): CarListItemResDto {
     return {
       id: entity.id,
-      make: entity. make,
+      make: entity.make,
       model: entity.model,
       year: entity.year,
       price: entity.price,
+      description: entity.description,
       tags: entity.tags.map((tag) => tag.name),
       user: UserMapper.toResponseDTO(entity.user),
     };
@@ -51,11 +48,10 @@ export class CarMapper {
       description: entity.description,
       created: entity.created,
       updated: entity.updated,
-      tags: entity.tags.map((tag) => tag.name),
+      tags: Array.isArray(entity.tags)
+        ? entity.tags.map((tag) => tag.name)
+        : [],
       user: entity.user ? UserMapper.toResponseDTO(entity.user) : undefined,
     };
   }
 }
-
-
-

@@ -2,12 +2,13 @@ import { PickType } from '@nestjs/swagger';
 
 import { BaseCarResDto } from './base-car.res.dto';
 
-export class ArticleListItemResDto extends PickType(BaseCarResDto, [
+export class CarListItemResDto extends PickType(BaseCarResDto, [
   'id',
   'make',
   'model',
   'year',
   'price',
+  'description',
   'tags',
   'user',
 ]) {}
