@@ -18,13 +18,16 @@ export class CarMapper {
     };
   }
 
-  public static toResponseListItemDTO(entity: CarEntity): CarListItemResDto {
+  public static toResponseListItemDTO(
+    entity: CarEntity
+  ): CarListItemResDto {
     return {
       id: entity.id,
       make: entity.make,
       model: entity.model,
       year: entity.year,
       price: entity.price,
+      created: entity.created,
       description: entity.description,
       tags: entity.tags.map((tag) => tag.name),
       user: UserMapper.toResponseDTO(entity.user),

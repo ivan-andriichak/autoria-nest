@@ -1,5 +1,6 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 
+import { Role } from '../../common/enums/role.enum';
 import { CarEntity } from './car.entity';
 import { TableNameEnum } from './enums/table-name.enum';
 import { CreateUpdateModel } from './models/create-update.model';
@@ -17,7 +18,7 @@ export class UserEntity extends CreateUpdateModel {
   password: string;
 
   @Column('text', { nullable: true })
-  bio?: string;
+  telephone: string;
 
   @Column('text', { nullable: true })
   image?: string;
@@ -27,4 +28,7 @@ export class UserEntity extends CreateUpdateModel {
 
   @OneToMany(() => RefreshTokenEntity, (entity) => entity.user)
   refreshTokens?: RefreshTokenEntity[];
+
+  @Column({ type: 'enum', enum: Role, default: Role.BUYER })
+  role: Role;
 }

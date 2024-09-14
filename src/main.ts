@@ -18,9 +18,9 @@ async function bootstrap() {
   const appConfig = configService.get<AppConfig>('app');
 
   const config = new DocumentBuilder()
-    .setTitle('Avtoria-NestJS')
+    .setTitle('Autoria-NestJS')
     .setDescription(
-      'Avtoria-NestJS - a scalable and flexible car selling platform similar to AutoRia,' +
+      'Autoria-NestJS - a scalable and flexible car selling platform similar to AutoRia,' +
         ' integrated with AWS.',
     )
     .setVersion('1.0.0')

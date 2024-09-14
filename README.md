@@ -1,5 +1,11 @@
 <p align="center">
-  <a href="https://nodejs.org/" target="blank"><img src="https://nodejs.org/static/images/logo.svg" width="200" alt="Node.js Logo" /></a>
+  <a href="https://nestjs.com/" target="blank">
+<img src="./src/logo/nestjs.svg" 
+width="200" alt="Nest.js Logo" 
+/>
+</a>
+<br>
+  <img src="./src/logo/Logo_AUTO.RIA.png" width="300" alt="Logo Ato.Ria" />
 </p>
 
 <p align="center">A scalable and flexible car selling platform similar to AutoRia, integrated with AWS.</p>

@@ -33,46 +33,4 @@ export class CarsListQueryDto {
   @IsString()
   @IsOptional()
   search?: string;
-
-  @Transform(TransformHelper.trim)
-  @Transform(TransformHelper.toLowerCase)
-  @IsString()
-  @IsOptional()
-  make?: string;
-
-  @Transform(TransformHelper.trim)
-  @Transform(TransformHelper.toLowerCase)
-  @IsString()
-  @IsOptional()
-  model?: string;
-
-  @Type(() => Number)
-  @IsInt()
-  @Min(1980)
-  @IsOptional()
-  year?: number;
-
-  @Type(() => Number)
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  minPrice?: number;
-
-  @Type(() => Number)
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  maxPrice?: number;
-
-  @Type(() => Number)
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  minMileage?: number;
-
-  @Type(() => Number)
-  @IsNumber()
-  @Min(0)
-  @IsOptional()
-  maxMileage?: number;
 }

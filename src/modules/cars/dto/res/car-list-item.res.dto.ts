@@ -8,6 +8,7 @@ export class CarListItemResDto extends PickType(BaseCarResDto, [
   'model',
   'year',
   'price',
+  'created',
   'description',
   'tags',
   'user',

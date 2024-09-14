@@ -9,6 +9,7 @@ import { JwtAccessGuard } from './guards/jwt-access.guard';
 import { AuthService } from './services/auth.service';
 import { AuthCacheService } from './services/auth-cach.service';
 import { TokenService } from './services/token.service';
+import { RolesGuard } from '../../common/guards/roles.guard';
 
 @Module({
   imports: [JwtModule, RedisModule, forwardRef(() => UsersModule)],
@@ -17,6 +18,10 @@ import { TokenService } from './services/token.service';
     {
       provide: APP_GUARD,
       useClass: JwtAccessGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
     },
     AuthService,
     TokenService,

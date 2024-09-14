@@ -22,46 +22,15 @@ export class CarRepository extends Repository<CarEntity> {
     qb.setParameter('userId', userId);
 
     if (query.search) {
-      qb.andWhere('CONCAT(car.make, car.description) ILIKE :search');
+      qb.andWhere(`
+      (CONCAT(car.make, ' ', car.model) ILIKE :search
+      OR tag.name ILIKE :search)
+    `);
       qb.setParameter('search', `%${query.search}%`);
     }
 
     if (query.tag) {
-      qb.andWhere('tag.name = :tag');
-      qb.setParameter('tag', query.tag);
-    }
-
-    qb.take(query.limit);
-    qb.skip(query.offset);
-
-    if (query.model) {
-      qb.andWhere('car.model = :model');
-      qb.setParameter('model', query.model);
-    }
-
-    if (query.year) {
-      qb.andWhere('car.year = :year');
-      qb.setParameter('year', query.year);
-    }
-
-    if (query.minPrice) {
-      qb.andWhere('car.price >= :minPrice');
-      qb.setParameter('minPrice', query.minPrice);
-    }
-
-    if (query.maxPrice) {
-      qb.andWhere('car.price <= :maxPrice');
-      qb.setParameter('maxPrice', query.maxPrice);
-    }
-
-    if (query.minMileage) {
-      qb.andWhere('car.mileage >= :minMileage');
-      qb.setParameter('minMileage', query.minMileage);
-    }
-
-    if (query.maxMileage) {
-      qb.andWhere('car.mileage <= :maxMileage');
-      qb.setParameter('maxMileage', query.maxMileage);
+      qb.andWhere('tag.name = :tag', { tag: query.tag });
     }
 
     qb.take(query.limit);
@@ -70,10 +39,8 @@ export class CarRepository extends Repository<CarEntity> {
     return await qb.getManyAndCount();
   }
 
-  public async getById(
-    userId: string,
-    carId: string
-  ): Promise<CarEntity> {
+
+  public async getById(userId: string, carId: string): Promise<CarEntity> {
     const qb = this.createQueryBuilder('car');
 
     qb.leftJoinAndSelect('car.tags', 'tag');

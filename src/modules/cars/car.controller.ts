@@ -1,9 +1,25 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query } from '@nestjs/common';
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags, ApiUnauthorizedResponse } from '@nestjs/swagger';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiNotFoundResponse,
+  ApiOkResponse, ApiQuery,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/enums/role.enum';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { IUserData } from '../auth/interfaces/user-data.interface';
-import { CarRepository } from '../repository/services/car.repository';
 import { CarsListQueryDto } from './dto/req/cars-list.query.dto';
 import { CreateCarReqDto } from './dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from './dto/req/update-car.req.dto';
@@ -16,21 +32,24 @@ import { CarService } from './services/car.service';
 @ApiTags('Cars')
 @Controller('cars')
 export class CarController {
-  constructor(
-    private readonly carService: CarService,
-    private readonly carRepository: CarRepository,
-  ) {}
+  constructor(private readonly carService: CarService) {}
 
-  @ApiOkResponse({ description: 'List of cars' })
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @Roles(Role.BUYER, Role.SELLER, Role.MANAGER, Role.ADMIN)
+  @ApiOkResponse({ description: 'List of found cars' })
+
+  @ApiQuery({ name: 'search', required: false, description: 'Search query: make, model or tag' })
+
   @Get()
   public async getList(
     @CurrentUser() userData: IUserData,
     @Query() query: CarsListQueryDto,
   ): Promise<CarListResDto> {
-    const [entities, total] = await this.carService.getList(userData,query);
+    const [entities, total] = await this.carService.getList(userData, query);
     return CarMapper.toResponseListDTO(entities, total, query);
   }
 
+  @Roles(Role.SELLER)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @Post()
   public async create(
@@ -41,6 +60,7 @@ export class CarController {
     return CarMapper.toResponseDTO(result);
   }
 
+  @Roles(Role.BUYER, Role.SELLER, Role.MANAGER, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @Get(':carId')
@@ -52,6 +72,7 @@ export class CarController {
     return CarMapper.toResponseDTO(result);
   }
 
+  @Roles(Role.SELLER, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @Patch(':carId')
@@ -63,6 +84,7 @@ export class CarController {
     return await this.carService.updateCar(userData, carId, dto);
   }
 
+  @Roles(Role.SELLER, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @Delete(':carId')

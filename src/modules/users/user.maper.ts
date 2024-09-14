@@ -12,14 +12,16 @@ export class UserMapper {
       name: data.name,
       email: data.email,
       image: data.image ? `${awsConfig.bucketUrl}/${data.image}` : null,
-      bio: data.bio,
+      telephone: data.telephone,
+      role: data.role,
     };
   }
   public static toIUserData(user: UserEntity, payload: IJwtPayload): IUserData {
     return {
       userId: payload.userId,
-      deviceId: payload.deviceId,
+      role: user.role,
       email: user.email,
+      deviceId: payload.deviceId,
     };
   }
 }

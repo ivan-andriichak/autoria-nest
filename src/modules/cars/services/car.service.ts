@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { In } from 'typeorm';
 
 import { CarEntity } from '../../../database/entities/car.entity';
@@ -9,8 +13,8 @@ import { TagRepository } from '../../repository/services/tag.repository';
 import { CarsListQueryDto } from '../dto/req/cars-list.query.dto';
 import { CreateCarReqDto } from '../dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from '../dto/req/update-car.req.dto';
-import { CarMapper } from './car.mapper';
 import { CarResDto } from '../dto/res/car.res.dto';
+import { CarMapper } from './car.mapper';
 
 @Injectable()
 export class CarService {
@@ -23,7 +27,7 @@ export class CarService {
     userData: IUserData,
     query: CarsListQueryDto,
   ): Promise<[CarEntity[], number]> {
-    return await this.carRepository.getList( userData.userId, query);
+    return await this.carRepository.getList(userData.userId, query);
   }
 
   public async create(
@@ -41,13 +45,12 @@ export class CarService {
     );
   }
 
-  public async getById(
-    userData: IUserData,
-    carId: string,
-  ): Promise<CarEntity> {
+  public async getById(userData: IUserData, carId: string): Promise<CarEntity> {
     const car = await this.carRepository.getById(userData.userId, carId);
     if (car.user_id !== userData.userId) {
-      throw new ForbiddenException('You do not have permission to view this car.');
+      throw new ForbiddenException(
+        'You do not have permission to view this car.',
+      );
     }
 
     return car;
@@ -60,7 +63,9 @@ export class CarService {
   ): Promise<CarResDto> {
     const car = await this.carRepository.getById(userData.userId, carId);
     if (car.user_id !== userData.userId) {
-      throw new ForbiddenException('You do not have permission to update this car.');
+      throw new ForbiddenException(
+        'You do not have permission to update this car.',
+      );
     }
     await this.carRepository.update(carId, dto);
 
@@ -68,14 +73,13 @@ export class CarService {
     return CarMapper.toResponseDTO(updatedCar);
   }
 
-  public async delete(
-    userData: IUserData,
-    carId: string,
-  ): Promise<void> {
+  public async delete(userData: IUserData, carId: string): Promise<void> {
     await this.checkIsCarExistOrThrow(carId);
     const car = await this.carRepository.findOneBy({ id: carId });
     if (car.user_id !== userData.userId) {
-      throw new ForbiddenException('You do not have permission to delete this car.');
+      throw new ForbiddenException(
+        'You do not have permission to delete this car.',
+      );
     }
     await this.carRepository.delete(carId);
   }
