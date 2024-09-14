@@ -1,11 +1,17 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform, Type } from 'class-transformer';
-import { IsOptional, IsString, Length, Matches } from 'class-validator';
+import {
+  IsArray,
+  IsOptional,
+  IsString,
+  Length,
+  Matches,
+} from 'class-validator';
 
+import { Role } from '../../../../common/enums/role.enum';
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
 
 export class BaseUserReqDto {
-
   @ApiProperty({
     description: 'The name of the user.',
     example: 'Clavdia Petrivna',
@@ -19,14 +25,17 @@ export class BaseUserReqDto {
   name?: string;
 
   @ApiProperty({
-    description: 'The bio of the user.',
-    example: 'Software engineer with a passion for coding.',
-    maxLength: 300,
+    description: 'The telephone number of the user.',
+    example: '+38(063) 255-98-00',
+    maxLength: 20,
   })
   @IsOptional()
   @IsString()
-  @Length(0, 300)
-  bio?: string;
+  @Length(18, 20)
+  @Matches(/^\+38\(\d{3}\) \d{3}-\d{2}-\d{2}$/, {
+    message: 'Telephone number is not valid',
+  })
+  telephone: string;
 
   @ApiProperty({
     description: 'The URL of the user’s profile image.',
@@ -57,4 +66,12 @@ export class BaseUserReqDto {
   @Length(0, 300)
   @Matches(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%_*#?&])[A-Za-z\d@$_!%*#?&]{8,}$/)
   password: string;
+
+  @ApiProperty({
+    description: 'The role of the user.',
+    example: 'seller',
+  })
+  @IsOptional()
+  @IsString()
+  role: Role;
 }

@@ -22,6 +22,10 @@ export class UsersService {
     private readonly authCacheService: AuthCacheService,
   ) {}
 
+  public async findAll(userData: IUserData): Promise<UserEntity> {
+    return await this.userRepository.findOneBy({ id: userData.userId });
+  }
+
   public async findMe(userData: IUserData): Promise<UserEntity> {
     return await this.userRepository.findOneBy({ id: userData.userId });
   }

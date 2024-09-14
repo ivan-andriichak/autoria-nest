@@ -11,15 +11,17 @@ export class BaseUserResDto {
   email: string;
 
   @ApiProperty()
-  bio?: string;
+  telephone?: string;
 
   @ApiProperty()
   image?: string;
+
+  @ApiProperty()
+  role?: string;
 
   @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()
   updatedAt: Date;
-
 }

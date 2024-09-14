@@ -1,5 +1,6 @@
 export interface IUserData {
   userId: string;
-  deviceId: string;
+  role: string;
   email: string;
+  deviceId: string;
 }

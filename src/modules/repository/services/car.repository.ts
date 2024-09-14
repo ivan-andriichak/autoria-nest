@@ -70,10 +70,7 @@ export class CarRepository extends Repository<CarEntity> {
     return await qb.getManyAndCount();
   }
 
-  public async getById(
-    userId: string,
-    carId: string
-  ): Promise<CarEntity> {
+  public async getById(userId: string, carId: string): Promise<CarEntity> {
     const qb = this.createQueryBuilder('car');
 
     qb.leftJoinAndSelect('car.tags', 'tag');
