@@ -19,9 +19,9 @@ export class UserMapper {
   public static toIUserData(user: UserEntity, payload: IJwtPayload): IUserData {
     return {
       userId: payload.userId,
-      role: user.role,
-      email: user.email,
       deviceId: payload.deviceId,
+      email: user.email,
+      role: user.role,
     };
   }
 }
