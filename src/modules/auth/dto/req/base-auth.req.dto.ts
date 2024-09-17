@@ -10,6 +10,7 @@ export class BaseAuthReqDto extends PickType(BaseUserReqDto, [
   'image',
   'name',
   'role',
+  'accountType'
 ]) {
   @ApiProperty({
     description: 'The unique device identifier.',

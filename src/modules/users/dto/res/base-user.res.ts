@@ -20,6 +20,9 @@ export class BaseUserResDto {
   role?: string;
 
   @ApiProperty()
+  accountType?: string;
+
+  @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()

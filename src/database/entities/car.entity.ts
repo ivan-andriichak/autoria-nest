@@ -1,8 +1,9 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany } from 'typeorm';
 import { TableNameEnum } from './enums/table-name.enum';
 import { CreateUpdateModel } from './models/create-update.model';
 import { UserEntity } from './user.entity';
 import { TagEntity } from './tag.entity';
+import { ViewEntity } from './view-entity';
 
 @Entity(TableNameEnum.CARS)
 export class CarEntity extends CreateUpdateModel {
@@ -58,4 +59,7 @@ export class CarEntity extends CreateUpdateModel {
   @ManyToMany(() => TagEntity, (entity) => entity.cars)
   @JoinTable()
   tags?: TagEntity[];
+
+  // @OneToMany(() => ViewEntity, (view) => view.car)
+  // views?: ViewEntity[];
 }

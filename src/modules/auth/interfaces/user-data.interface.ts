@@ -3,4 +3,5 @@ export interface IUserData {
   role: string;
   email: string;
   deviceId: string;
+  accountType: string;
 }

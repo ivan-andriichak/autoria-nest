@@ -5,6 +5,7 @@ import { CarEntity } from './car.entity';
 import { TableNameEnum } from './enums/table-name.enum';
 import { CreateUpdateModel } from './models/create-update.model';
 import { RefreshTokenEntity } from './refresh-token.entity';
+import { AccountType } from '../../common/enums/account-name.enum';
 
 @Entity(TableNameEnum.USERS)
 export class UserEntity extends CreateUpdateModel {
@@ -31,4 +32,7 @@ export class UserEntity extends CreateUpdateModel {
 
   @Column({ type: 'enum', enum: Role, default: Role.BUYER })
   role: Role;
+
+  @Column({ type: 'enum', enum: AccountType, default: AccountType.BASIC })
+  accountType: AccountType;
 }

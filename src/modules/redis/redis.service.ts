@@ -45,4 +45,13 @@ export class RedisService {
   public async expire(key: string, time: number): Promise<number> {
     return await this.redisClient.expire(key, time);
   }
+
+  public async getCarViews(carId: string): Promise<number> {
+    const views = await this.redisClient.get(`car:${carId}:views`);
+    return views ? parseInt(views, 10) : 0;
+  }
+
+  public async keys(pattern: string): Promise<string[]> {
+    return this.redisClient.keys(pattern);
+  }
 }

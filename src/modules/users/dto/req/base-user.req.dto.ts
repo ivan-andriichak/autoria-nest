@@ -10,6 +10,7 @@ import {
 
 import { Role } from '../../../../common/enums/role.enum';
 import { TransformHelper } from '../../../../common/helpers/transform.helper';
+import { AccountType } from '../../../../common/enums/account-name.enum';
 
 export class BaseUserReqDto {
   @ApiProperty({
@@ -74,4 +75,12 @@ export class BaseUserReqDto {
   @IsOptional()
   @IsString()
   role: Role;
+
+  @ApiProperty({
+    description: 'The account type of the user.',
+    example: 'premium',
+  })
+  @IsOptional()
+  @IsString()
+  accountType?: AccountType;
 }

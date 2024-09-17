@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 
+import { AccountType } from '../../common/enums/account-name.enum';
 import { UserEntity } from '../../database/entities/user.entity';
 import { IUserData } from '../auth/interfaces/user-data.interface';
 import { AuthCacheService } from '../auth/services/auth-cach.service';
@@ -22,12 +23,20 @@ export class UsersService {
     private readonly authCacheService: AuthCacheService,
   ) {}
 
-  public async findAll(userData: IUserData): Promise<UserEntity> {
+  public async findMe(userData: IUserData): Promise<UserEntity> {
     return await this.userRepository.findOneBy({ id: userData.userId });
   }
 
-  public async findMe(userData: IUserData): Promise<UserEntity> {
-    return await this.userRepository.findOneBy({ id: userData.userId });
+  async upgradeToPremium(userId:string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    user.accountType = AccountType.PREMIUM;
+    return await this.userRepository.save(user);
   }
 
   public async updateMe(

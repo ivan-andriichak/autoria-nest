@@ -11,7 +11,8 @@ import {
 import {
   ApiBearerAuth,
   ApiNotFoundResponse,
-  ApiOkResponse, ApiQuery,
+  ApiOkResponse,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -35,11 +36,12 @@ export class CarController {
   constructor(private readonly carService: CarService) {}
 
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
-  @Roles(Role.BUYER, Role.SELLER, Role.MANAGER, Role.ADMIN)
   @ApiOkResponse({ description: 'List of found cars' })
-
-  @ApiQuery({ name: 'search', required: false, description: 'Search query: make, model or tag' })
-
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search query: make, model or tag',
+  })
   @Get()
   public async getList(
     @CurrentUser() userData: IUserData,
@@ -60,7 +62,6 @@ export class CarController {
     return CarMapper.toResponseDTO(result);
   }
 
-  @Roles(Role.BUYER, Role.SELLER, Role.MANAGER, Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @Get(':carId')
@@ -84,14 +85,11 @@ export class CarController {
     return await this.carService.updateCar(userData, carId, dto);
   }
 
-  @Roles(Role.SELLER, Role.ADMIN)
+  @Roles(Role.ADMIN)
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiNotFoundResponse({ description: 'Not Found' })
   @Delete(':carId')
-  public async delete(
-    @CurrentUser() userData: IUserData,
-    @Param('carId') carId: string,
-  ): Promise<void> {
-    await this.carService.delete(userData, carId);
+  public async delete(@Param('carId') carId: string): Promise<void> {
+    await this.carService.delete(carId);
   }
 }

@@ -5,11 +5,13 @@ import {
 } from '@nestjs/common';
 import { In } from 'typeorm';
 
+import { AccountType } from '../../../common/enums/account-name.enum';
 import { CarEntity } from '../../../database/entities/car.entity';
 import { TagEntity } from '../../../database/entities/tag.entity';
 import { IUserData } from '../../auth/interfaces/user-data.interface';
 import { CarRepository } from '../../repository/services/car.repository';
 import { TagRepository } from '../../repository/services/tag.repository';
+import { ViewService } from '../../views/view.service';
 import { CarsListQueryDto } from '../dto/req/cars-list.query.dto';
 import { CreateCarReqDto } from '../dto/req/create-car.req.dto';
 import { UpdateCarReqDto } from '../dto/req/update-car.req.dto';
@@ -34,6 +36,13 @@ export class CarService {
     userData: IUserData,
     dto: CreateCarReqDto,
   ): Promise<CarEntity> {
+    const existingCarsCount = await this.carRepository.count({
+      where: { user_id: userData.userId },
+    });
+    if (userData.accountType === AccountType.BASIC && existingCarsCount >= 1) {
+      throw new Error('Basic account can only post one car for sale.');
+    }
+
     const tags = await this.createTags(dto.tags);
 
     return await this.carRepository.save(
@@ -61,6 +70,7 @@ export class CarService {
     carId: string,
     dto: UpdateCarReqDto,
   ): Promise<CarResDto> {
+    await this.checkIsCarExistOrThrow(carId);
     const car = await this.carRepository.getById(userData.userId, carId);
     if (car.user_id !== userData.userId) {
       throw new ForbiddenException(
@@ -73,14 +83,9 @@ export class CarService {
     return CarMapper.toResponseDTO(updatedCar);
   }
 
-  public async delete(userData: IUserData, carId: string): Promise<void> {
+  public async delete(carId: string): Promise<void> {
     await this.checkIsCarExistOrThrow(carId);
-    const car = await this.carRepository.findOneBy({ id: carId });
-    if (car.user_id !== userData.userId) {
-      throw new ForbiddenException(
-        'You do not have permission to delete this car.',
-      );
-    }
+
     await this.carRepository.delete(carId);
   }
 

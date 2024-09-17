@@ -17,12 +17,15 @@ import { TokenPairResDto } from './dto/res/token-pair.res.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { IUserData } from './interfaces/user-data.interface';
 import { AuthService } from './services/auth.service';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/enums/role.enum';
 
 @ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @Roles( Role.ADMIN)
   @SkipAuth()
   @Post('sign-up')
   public async signUp(@Body() dto: SignUpReqDto): Promise<AuthResDto> {
@@ -44,6 +47,7 @@ export class AuthController {
   ): Promise<TokenPairResDto> {
     return await this.authService.refresh(userData);
   }
+
 
   @ApiBearerAuth()
   @HttpCode(HttpStatus.NO_CONTENT)

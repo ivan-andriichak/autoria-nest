@@ -32,11 +32,27 @@ import { UpdateUserDto } from './dto/req/update-user.dto';
 import { UserResDto } from './dto/res/user.res.dto';
 import { UserMapper } from './user.maper';
 import { UsersService } from './users.service';
+import { Roles } from '../../common/decorators/roles.decorator';
+import { Role } from '../../common/enums/role.enum';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @ApiBearerAuth()
+  @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
+  @ApiConflictResponse({ description: 'Conflict' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
+  @Roles(Role.MANAGER)
+  @Put(':userId/upgrade')
+  public async upgradeToPremium(
+    @Param('userId', ParseUUIDPipe) userId: string,
+  ): Promise<UserResDto> {
+    const user = await this.usersService.upgradeToPremium(userId);
+    return UserMapper.toResponseDTO(user);
+  }
 
   @ApiBearerAuth()
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
@@ -68,6 +84,7 @@ export class UsersController {
   @ApiConflictResponse({ description: 'Conflict' })
   @ApiNoContentResponse({ description: 'User has been removed' })
   @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles(Role.MANAGER)
   @Delete('me')
   public async removeMe(@CurrentUser() userData: IUserData): Promise<void> {
     return await this.usersService.removeMe(userData);
@@ -94,6 +111,7 @@ export class UsersController {
   }
 
   @SkipAuth()
+  @Roles(Role.MANAGER)
   @Get(':userId')
   public async findOne(
     @Param('userId', ParseUUIDPipe) userId: string,
