@@ -27,14 +27,15 @@ $ npm install
 ## Running the app
 
 ```bash
-# development
-$ npm run start
+# Start the database container using Docker
+$ npm run start:docker:db
 
-# watch mode
-$ npm run start:dev
+```
+```bash
 
-# production mode
-$ npm run start:prod
+# Start the app in local development mode with file watching
+$ npm run start:local
+
 ```
 
 ## Test
