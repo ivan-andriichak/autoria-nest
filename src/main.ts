@@ -60,7 +60,7 @@ async function bootstrap() {
   await app.listen(appConfig.port, () => {
     Logger.log(`Server running on https://${appConfig.host}:${appConfig.port}`);
     Logger.log(
-      `Swagger running on https://${appConfig.host}:${appConfig.port}/docs`,
+      `Swagger running on http://${appConfig.host}:${appConfig.port}/docs`,
     );
   });
 }
